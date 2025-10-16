@@ -35,6 +35,20 @@ public class Sudoku {
         }
     }
 
+    // Inicio real do jogo
+    public static void comecar() {
+        limparTerminal();
+        int[][] sudokuAlteravel = new int[9][9];
+        int[][] sudokuCompleto = new int[9][9];
+        do {
+            embaralharGrade(sudokuCompleto);
+            sudokuAlteravel = sudokuCompleto;
+            retirarPosicoes(sudokuAlteravel);
+            imprimirGrade(sudokuAlteravel);
+            colocarPosicao(sudokuAlteravel);
+        } while (verificarVitoria(sudokuAlteravel, sudokuCompleto) != true);
+    }
+
     // Como se deve jogar tanto na minha versão e regras do sudoku
     public static void instrucoes() {
         limparTerminal();
@@ -57,25 +71,45 @@ public class Sudoku {
         System.out.flush();
     }
 
-    // Inicio real do jogo
-    public static void comecar() {
-        limparTerminal();
-        int[][] sudokuAlteravel = new int[9][9];
-        int[][] sudokuCompleto = new int[9][9];
-        do {
-            embaralharGrade(sudokuCompleto);
-            sudokuAlteravel = sudokuCompleto;
-            retirarPosicoes(sudokuAlteravel);
-            imprimirGrade(sudokuAlteravel);
-            colocarPosicao(sudokuAlteravel);
-        } while (verificarVitoria(sudokuAlteravel, sudokuCompleto) != true);
+    public static void setColor(int cor) {
+        String s = "[0m";
+        switch (cor) {
+            case 0:
+                s = "[30m";// preto
+                break;
+            case 1:
+                s = "[31m";// vermelho
+                break;
+            case 2:
+                s = "[32m";// verde
+                break;
+            case 3:
+                s = "[33m";// amarelo
+                break;
+            case 4:
+                s = "[34m";// azul
+                break;
+            case 5:
+                s = "[35m";// magenta
+                break;
+            case 6:
+                s = "[36m";// ciano
+                break;
+            case 7:
+                s = "[97m";// branco
+                break;
+        }
+
+        System.out.print((char) 27 + s);
     }
 
     public static void imprimirGrade(int[][] sudokuAlteravel) {
         System.out.println("\t\t S U D O K U");
         for (int i = 0; i < 9; i++) {
+            setColor(2);
             System.out.printf("  %d  ", i);
         }
+        setColor(0);
         System.out.print("\n -------------------------------------------\n");
         for (int i = 0; i < sudokuAlteravel.length; i++) {
             for (int j = 0; j < sudokuAlteravel.length; j++) {
@@ -83,15 +117,33 @@ public class Sudoku {
                     System.out.print(" -------------------------------------------\n");
                 }
                 if (j % 3 == 0 && j != 0) {
+                    setColor(0);
                     System.out.print(" []");
                     System.out.print(" | ");
-                    System.out.print(sudokuAlteravel[i][j]);
+
+                    if (sudokuAlteravel[i][j] != 0) {
+                        setColor(7);
+                        System.out.print(sudokuAlteravel[i][j]);
+                    } else {
+                        setColor(4);
+                        System.out.print(sudokuAlteravel[i][j]);
+                    }
+
                 } else {
+                    setColor(0);
                     System.out.print(" | ");
-                    System.out.print(sudokuAlteravel[i][j]);
+                    if (sudokuAlteravel[i][j] != 0) {
+                        setColor(7);
+                        System.out.print(sudokuAlteravel[i][j]);
+                    } else {
+                        setColor(4);
+                        System.out.print(sudokuAlteravel[i][j]);
+                    }
+
                 }
 
             }
+            setColor(0);
             System.out.print(" | \n");
         }
 
@@ -111,7 +163,23 @@ public class Sudoku {
     }
 
     public static void retirarPosicoes(int[][] sudokuAlteravel) {
+        int linha = 10;
+        int coluna = 10;
+        ;
+        int linhaAnterior;
+        int colunaAnterior;
+        for (int i = 0; i < 51; i++) {
+            linhaAnterior = linha;
+            colunaAnterior = coluna;
+            linha = (int) (Math.random() * 9);
+            coluna = (int) (Math.random() * 9);
+            while (linhaAnterior == linha && colunaAnterior == coluna) {
+                linha = (int) (Math.random() * 9);
+                coluna = (int) (Math.random() * 9);
+            }
+            sudokuAlteravel[linha][coluna] = 0;
 
+        }
     }
 
     // Gera numeros semi aleatorios na grade do sudoku (semi aleatorio por ainda
@@ -121,9 +189,9 @@ public class Sudoku {
         int[][] sudoku = new int[9][9];
         for (int i = 0; i < sudoku.length; i++) {
             for (int j = 0; j < sudoku.length; j++) {
-
-            }
-        }
+                sudoku1[i][j] = (int) ((Math.random() * 9) + 1);
+                }
+     }   
 
     }
 
@@ -135,6 +203,6 @@ public class Sudoku {
     }
 
     public static void main(String[] args) {
-        Abertura();
+            Abertura();
     }
 }
