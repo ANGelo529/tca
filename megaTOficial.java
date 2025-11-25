@@ -30,7 +30,7 @@ public class megaT {
     static int turnos;
     static int turnoInicial;
     static int temTiro;
-    static float danoBasePlayer = (float) (100);
+    static float danoBasePlayer = (float) (10);
     static boolean temHist = true;
     static boolean entrou = true;
     static boolean venceu = false;
@@ -429,7 +429,7 @@ public class megaT {
     }
 
     @SuppressWarnings("ManualArrayToCollectionCopy")
-    public static void spawnarInimigo(char[][] mapa, int qtdInimigosDesejados, char[][] personagem, int TAMANHOY,
+    public static void spawnarInimigo(char[][] mapa, int qtdInimigosDesejados, char[][] personagem, int tamanhoI,
             int TamanhoJ, int inimigosDesejado) {
 
         // Coloca a posição inicial dos inimigos
@@ -459,11 +459,11 @@ public class megaT {
         }
 
         // Impressão do inimigo na matriz principal
-        for (int i = 0; i < TAMANHOY; i++) {
+        for (int i = 0; i < tamanhoI; i++) {
 
             for (int j = 0; j < TamanhoJ; j++) {
 
-                mapa[9 + i][posicaoInimigos[inimigosDesejado] + j] = personagem[i][j];
+                mapa[(14 - tamanhoI) + i][posicaoInimigos[inimigosDesejado] + j] = personagem[i][j];
 
             }
         }
@@ -781,16 +781,23 @@ public class megaT {
                 if (ultimoClique == 'd' || ultimoClique == 'D') {
 
                     // Verificação se o tiro chegou no inimigo1
-                    if (descobrirPosicao(2) <= posicaoTiro) {
+                    if (descobrirPosicao(2) <= posicaoTiro && descobrirPosicao(2) != 0) {
 
                         vidaInimigo[0] -= danoBasePlayer;
                         break;
                     }
 
                     // Verificação se o tiro chegou no inimigo2
-                    if (descobrirPosicao(7) >= posicaoTiro) {
+                    if (descobrirPosicao(7) <= posicaoTiro && descobrirPosicao(7) != 0) {
 
                         vidaInimigo[1] -= danoBasePlayer;
+                        break;
+                    }
+
+                    // Verificação se o tiro chegou no boss
+                    if (descobrirPosicao(3) <= posicaoTiro && descobrirPosicao(3) != 0) {
+
+                        vidaInimigo[2] -= danoBasePlayer;
                         break;
                     }
                 }
@@ -799,16 +806,23 @@ public class megaT {
                 if (ultimoClique == 'a' || ultimoClique == 'A') {
 
                     // Verificação se o tiro chegou no inimigo1
-                    if (descobrirPosicao(2) >= posicaoTiro) {
+                    if (descobrirPosicao(2) >= posicaoTiro && descobrirPosicao(7) != 0) {
 
                         vidaInimigo[0] -= danoBasePlayer;
                         break;
                     }
 
                     // Verificação se o tiro chegou no inimigo2
-                    if (descobrirPosicao(7) >= posicaoTiro) {
+                    if (descobrirPosicao(7) >= posicaoTiro && descobrirPosicao(7) != 0) {
 
                         vidaInimigo[1] -= danoBasePlayer;
+                        break;
+                    }
+
+                    // Verificação se o tiro chegou no inimigo2
+                    if (descobrirPosicao(3) >= posicaoTiro && descobrirPosicao(3) != 0) {
+
+                        vidaInimigo[2] -= danoBasePlayer;
                         break;
                     }
                 }
@@ -907,6 +921,14 @@ public class megaT {
                 spawnarPlayer(posicao, mapa);
                 fase5SpawnarInimigo();
                 fase5InimigoMorrer();
+                break;
+
+            case 6:
+                spawnarPlayer(posicao, mapa);
+                venceu = true;
+                vivo = false;
+                break;
+
             default:
                 break;
         }
@@ -1065,7 +1087,7 @@ public class megaT {
 
             }
 
-        } else if (ataqueDesejado == 2 && vidaInimigo[2] > 0 && fase == 5) {
+        } else if (ataqueDesejado == 3 && vidaInimigo[2] > 0 && fase == 5) {
             // Ataques do boss (incompleto)
             if (entrou) {
                 turnoInicial = turnos;
@@ -1138,7 +1160,7 @@ public class megaT {
                 // Segundo IF para saber se não passou muito da posição do player
                 if (!(descobrirPosicao(6) <= posAtaque)) {
                     if (posAtaque >= posicao + 3) {
-                        vida -= 1;
+                        vida -= 3;
                         break;
                     }
                 }
@@ -1166,7 +1188,7 @@ public class megaT {
                 // Segundo IF para saber se não passou muito da posição do player
                 if (!(descobrirPosicao(6) >= posAtaque)) {
                     if (posAtaque <= posicao - 3) {
-                        vida -= 1;
+                        vida -= 3;
                         break;
                     }
                 }
@@ -1311,6 +1333,8 @@ public class megaT {
     }
 
     public static void imprimirVenceu() {
+        setColor(1);
+        gotoXY(19, 80);
         System.out.println("PARABENS ");
         System.out.println(
                 "Graças a sua batalha nós conseguimos acabar com a revolução das IA's e prender TREBREH E OGAIHT");
