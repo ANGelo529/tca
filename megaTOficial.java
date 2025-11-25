@@ -781,14 +781,14 @@ public class megaT {
                 if (ultimoClique == 'd' || ultimoClique == 'D') {
 
                     // Verificação se o tiro chegou no inimigo1
-                    if (descobrirPosicao(2) <= posicaoTiro && vidaInimigo[0] > 0) {
+                    if (descobrirPosicao(2) <= posicaoTiro) {
 
                         vidaInimigo[0] -= danoBasePlayer;
                         break;
                     }
 
                     // Verificação se o tiro chegou no inimigo2
-                    if (descobrirPosicao(7) >= posicaoTiro && vidaInimigo[1] > 0) {
+                    if (descobrirPosicao(7) >= posicaoTiro) {
 
                         vidaInimigo[1] -= danoBasePlayer;
                         break;
@@ -1310,6 +1310,12 @@ public class megaT {
         Thread.sleep(15000);
     }
 
+    public static void imprimirVenceu() {
+        System.out.println("PARABENS ");
+        System.out.println(
+                "Graças a sua batalha nós conseguimos acabar com a revolução das IA's e prender TREBREH E OGAIHT");
+    }
+
     public static void imprimirTabletesUps() {
         // Somente coloca os tabletes na matriz principal os ups
         for (int i = 0; i < TAMANHOY[5]; i++) {
@@ -1374,9 +1380,11 @@ public class megaT {
 
         // Reset de algumas variaveis de inimigos
         vidaInimigo[0] = 2;
-        vidaInimigo[1] = 5;
+        vidaInimigo[1] = 3;
+        vidaInimigo[2] = 6;
         posicaoInimigos[0] = -51;
         posicaoInimigos[1] = -51;
+        posicaoInimigos[2] = -51;
         temUp[0] = true;
         temUp[1] = true;
     }
@@ -1415,7 +1423,7 @@ public class megaT {
         if (vida <= 0) {
             mortePlayer();
         } else if (venceu) {
-
+            imprimirVenceu();
         }
 
     }
