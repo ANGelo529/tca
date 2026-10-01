@@ -14,11 +14,13 @@ VALORES DO VETOR TEMINIMIGOS: (0 inimigo 1) (1 inimigo 2) (2 boss)
 VALORES DO VETOR POSICAOINIMIGOS: (0 inimigo 1) (1 inimigo 2) (2 boss)
 */
 import java.util.Scanner;
+import org.jline.terminal.Terminal;
+import org.jline.terminal.TerminalBuilder;
 
-public class megaT {
+public class megaTOficial {
     final static Scanner LER = new Scanner(System.in);
     // Na escola TAMANHO = 221 EM CASA 200
-    final static int TAMANHO = 200;
+    final static int TAMANHO = obterLarguraTerminal();
     final static int MOVIMENTODOPLAYER = 20;
     final static int[] TAMANHOX = new int[11];
     final static int[] TAMANHOY = new int[11];
@@ -42,6 +44,7 @@ public class megaT {
     static boolean[] temInimigos = new boolean[3];
     static boolean[] temUp = new boolean[2];
     static char[][] mapa = new char[14][TAMANHO];
+    static Terminal terminal;
     static char[][] personagem = {
             { ' ', ' ', '┌', '─', '─', '┐', ' ', ' ' },
             { ' ', ' ', '│', 'O', 'O', '│', ' ', ' ' },
@@ -198,6 +201,27 @@ public class megaT {
         System.out.print((char) 27 + s);
     }
 
+    public static int obterLarguraTerminal() {
+    try {
+        if (terminal == null) {
+            // Inicializa a interface com o terminal do sistema
+            terminal = TerminalBuilder.builder()
+                        .system(true)
+                        .dumb(true) // Fallback caso não seja um terminal ANSI completo
+                        .build();
+        }
+        
+        // Pega o número de colunas atual da Janela
+        int colunas = terminal.getWidth();
+        
+        // Se retornar um valor válido, usa ele; senão usa 120
+        return (colunas > 0) ? colunas : 120;
+    } catch (Exception e) {
+        // Caso ocorra qualquer erro ao inicializar o terminal
+        return 120;
+    }
+}
+
     public static void instrucoes() {
         // Comandos de como se joga (as teclas foram escolhidas em base pelo uso geral
         // em jogos)
@@ -283,18 +307,21 @@ public class megaT {
     public static void imprimirMapa(char[][] mapa) {
         // Imprime o mapa depois de todas as alterações
         for (int i = 0; i < 14; i++) {
-
-            for (int j = 0; j < TAMANHO; j++) {
+            //gotoXY(i, 10);
+            for (int j = 0; j < TAMANHO - 10; j++) {
 
                 System.out.print(mapa[i][j]);
             }
+            System.out.println();
         }
-
-        for (int i = 0; i < TAMANHO; i++) {
+        //gotoXY(15, 10);
+        for (int i = 0; i < TAMANHO - 11; i++) {
 
             System.out.print("=");
             System.out.print("=");
         }
+        System.out.print("==");
+        System.out.println();
     }
 
     @SuppressWarnings("ManualArrayToCollectionCopy")
