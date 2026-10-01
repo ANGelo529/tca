@@ -20,7 +20,7 @@ import org.jline.terminal.TerminalBuilder;
 public class megaTOficial {
     final static Scanner LER = new Scanner(System.in);
     // Na escola TAMANHO = 221 EM CASA 200
-    final static int TAMANHO = obterLarguraTerminal();
+    final static int TAMANHO = obterLarguraTerminal() + 10;
     final static int MOVIMENTODOPLAYER = 20;
     final static int[] TAMANHOX = new int[11];
     final static int[] TAMANHOY = new int[11];
